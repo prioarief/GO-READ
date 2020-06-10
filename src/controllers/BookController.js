@@ -1,12 +1,14 @@
 const { getAll, getDetail, insertBook, editBook, deleteBook, searchBook } = require("../models/Book")
 const helper = require("../helpers/message")
+const validate = require("../helpers/validate")
 
 module.exports = {
 	getAllBook: async (req, res) => {
-        const show = req.query.show
-        const page = req.query.page
-        const sort = (req.query.sort == 'latest') ? 'DESC' : ''
-        const search = req.query.search
+        const show = req.query.show || ''
+        const page = req.query.page || ''
+        const sorting = req.query.sort || ''
+        const sort = (sorting == 'latest') ? 'DESC' : ''
+        const search = req.query.search || ''
         let thisPage = (show * page) - show
 		try {
             const result = await getAll(show, thisPage, sort, search)
@@ -38,9 +40,13 @@ module.exports = {
 	createBook: async (req, res) => {
 		const setData = req.body
         try {
-            const result =  await insertBook(setData)
-            const data = await getDetail(result.id)
-            return helper.response(res, 'success' , data, 201)
+            const validation = validate.bookValidation(setData)
+            if(validation.error == null){
+                const result =  await insertBook(setData)
+                const data = await getDetail(result.id)
+                return helper.response(res, 'success' , data, 201)
+            }
+            return helper.response(res, 'failed', validation.error.details[0].message, 500)
         } catch (error) {
             console.log(error)
             return helper.response(res, 'failed', 'Internal Server Error', 500)

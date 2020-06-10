@@ -1,5 +1,6 @@
 const { getAll, getDetail, insertAuthor, editAuthor, deleteAuthor, searchAuthor } = require("../models/Author")
 const helper = require("../helpers/message")
+const validate = require("../helpers/validate")
 
 module.exports = {
 	getAllAuthor: async (req, res) => {
@@ -33,8 +34,12 @@ module.exports = {
 	createAuthor: async (req, res) => {
 		const setData = req.body
         try {
-            const result =  await insertAuthor(setData)
-            return helper.response(res, 'success' , result, 201)
+                const validation =  validate.authorValidation(setData)
+                if(validation.error == null){
+                    const result = await insertAuthor(setData)
+                    return helper.response(res, 'success' , result, 201)
+                }
+                return helper.response(res, 'failed' , validation.error.details[0].message, 500)
         } catch (error) {
             console.log(error)
             return helper.response(res, 'failed', 'Internal Server Error', 500)
@@ -45,15 +50,20 @@ module.exports = {
         const setData = req.body
         const id = req.params.id
         try {
-            const result = await editAuthor(setData, id)
-            const newData = {
-                id,
-                ...setData
-            }
-            if(result.affectedRows == 1){
-                return helper.response(res, 'success' , newData, 200)
-            }
-            return helper.response(res, 'failed' , `Data id ${id} not found`, 404)
+            const validation =  validate.authorValidation(setData)
+                if(validation.error == null){
+                    const result = await editAuthor(setData, id)
+                    const newData = {
+                        id,
+                        ...setData
+                    }
+                    if(result.affectedRows == 1){
+                        return helper.response(res, 'success' , newData, 200)
+                    }
+
+                    return helper.response(res, 'failed' , `Data id ${id} not found`, 404)
+                }
+                return helper.response(res, 'failed' , validation.error.details[0].message, 500)
         } catch (error) {
             console.log(error)
             return helper.response(res, 'failed', 'Internal Server Error', 500)
