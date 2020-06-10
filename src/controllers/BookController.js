@@ -1,6 +1,9 @@
 const { getAll, getDetail, insertBook, editBook, deleteBook, searchBook } = require("../models/Book")
 const helper = require("../helpers/message")
 const validate = require("../helpers/validate")
+// const multer = require("multer")
+// const upload = multer({dest : 'uploads/'})
+
 
 module.exports = {
 	getAllBook: async (req, res) => {
@@ -38,7 +41,8 @@ module.exports = {
 
 
 	createBook: async (req, res) => {
-		const setData = req.body
+        const setData = req.body
+        setData.image = req.file.originalname
         try {
             const validation = validate.bookValidation(setData)
             if(validation.error == null){
