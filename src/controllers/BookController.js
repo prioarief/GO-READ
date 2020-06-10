@@ -4,8 +4,8 @@ const validate = require("../helpers/validate")
 
 module.exports = {
 	getAllBook: async (req, res) => {
-        const show = req.query.show || ''
-        const page = req.query.page || ''
+        const show = req.query.show || 2
+        const page = req.query.page || 1
         const sorting = req.query.sort || ''
         const sort = (sorting == 'latest') ? 'DESC' : ''
         const search = req.query.search || ''
