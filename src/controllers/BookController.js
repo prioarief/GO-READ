@@ -1,8 +1,7 @@
 const { getAll, getDetail, insertBook, editBook, deleteBook, searchBook } = require("../models/Book")
 const helper = require("../helpers/message")
 const validate = require("../helpers/validate")
-// const multer = require("multer")
-// const upload = multer({dest : 'uploads/'})
+const fs = require("fs")
 
 
 module.exports = {
@@ -42,7 +41,8 @@ module.exports = {
 
 	createBook: async (req, res) => {
         const setData = req.body
-        setData.image = req.file.originalname
+        setData.image = req.file.filename
+        console.log(setData)
         try {
             const validation = validate.bookValidation(setData)
             if(validation.error == null){
@@ -60,10 +60,18 @@ module.exports = {
     editBook : async (req, res) => {
         const setData = req.body
         const id = req.params.id
+        let oldImage = null
+        if(req.file){
+            const newImage = req.file.filename
+            setData.image = newImage
+            const OldData = await getDetail(id)
+            oldImage = OldData[0].image
+        }
         try {
             const result = await editBook(setData, id)
-            const data = await getDetail(id)
             if(result.affectedRows == 1){
+                if(oldImage != null) fs.unlinkSync(`src/images/${oldImage}`)
+                const data = await getDetail(id)
                 return helper.response(res, 'success' , data, 200)
             }
             return helper.response(res, 'failed' , `Data id ${id} not found`, 404)
@@ -76,8 +84,11 @@ module.exports = {
     deleteBook : async (req, res) => {
         const id = req.params.id
         try {
+            const data = await getDetail(id)
+            const image = data[0].image
             const result = await deleteBook(id)
             if(result.affectedRows == 1){
+                fs.unlinkSync(`src/images/${image}`)
                 return helper.response(res, 'success' , `Data id ${id} berhasil di hapus`, 200)
             }
             return helper.response(res, 'failed' , `Data id ${id} not found`, 404)

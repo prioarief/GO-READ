@@ -6,7 +6,8 @@ const storage = multer.diskStorage({
         cb(null, './src/images/')
     },
     filename: (req, file, cb) => {
-        cb(null, file.originalname)
+        const image = file.originalname
+        cb(null, `${Date.now()}-${req.body.title.split(" ").join("-").toLowerCase()}${image.slice(image.length-4, image.length )}` )
     },
 })
 const upload = multer({storage : storage})
@@ -16,7 +17,7 @@ router.get("/", getAllBook);
 router.get("/search/", searchBook);
 router.get("/:id", detailBook);
 router.post("/", upload.single('image'), createBook);
-router.put("/:id", editBook);
+router.put("/:id", upload.single('image'), editBook);
 router.delete("/:id", deleteBook);
 
 module.exports = router;
