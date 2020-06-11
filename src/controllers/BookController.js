@@ -42,7 +42,7 @@ module.exports = {
 	createBook: async (req, res) => {
         const setData = req.body
         setData.image = req.file.filename
-        console.log(setData)
+        console.log(req.file)
         try {
             const validation = validate.bookValidation(setData)
             if(validation.error == null){
