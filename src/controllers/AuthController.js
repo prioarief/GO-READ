@@ -21,7 +21,7 @@ module.exports = {
             }
             let errorMessage = validation.error.details[0].message
             errorMessage = errorMessage.replace(/"/g, "")
-            return helper.response(res, 'failed' , errorMessage, 500)
+            return helper.response(res, 'failed' , errorMessage, 401)
         } catch (error) {
             console.log(error)
             return helper.response(res, 'failed', 'Internal Server Error', 500)
@@ -53,7 +53,7 @@ module.exports = {
             }
                 let errorMessage = validation.error.details[0].message
                 errorMessage = errorMessage.replace(/"/g, "")
-                return helper.response(res, 'failed' , errorMessage, 500)
+                return helper.response(res, 'failed' , errorMessage, 401)
         } catch (error) {
             console.log(error)
             return helper.response(res, 'failed', 'Internal Server Error', 500)
