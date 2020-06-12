@@ -1,16 +1,6 @@
 const express = require("express");
-const multer = require("multer")
 const router = express.Router();
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, './src/images/')
-    },
-    filename: (req, file, cb) => {
-        const image = file.originalname
-        cb(null, `${Date.now()}-${req.body.title.split(" ").join("-").toLowerCase()}${image.slice(image.length-4, image.length )}` )
-    },
-})
-const upload = multer({storage : storage})
+const upload = require("../helpers/upload")
 const { getAllBook , createBook, detailBook, editBook, deleteBook, searchBook } = require("../controllers/BookController");
 
 router.get("/", getAllBook);
