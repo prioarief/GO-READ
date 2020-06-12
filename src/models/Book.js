@@ -39,6 +39,7 @@ module.exports = {
                     id : result.insertId,
                     ...setData
                 }
+                console.log(result)
                 resolve(newData)
             })
         })

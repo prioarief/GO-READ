@@ -4,8 +4,8 @@ const storage = multer.diskStorage({
         cb(null, './public/images/')
     },
     filename: (req, file, cb) => {
-        const image = file.originalname
-        cb(null, `${Date.now()}-${req.body.title.split(" ").join("-").toLowerCase()}${image.slice(image.length-4, image.length )}` )
+        const image = file.originalname.split(".").pop()
+        cb(null, `${Date.now()}-${req.body.title.split(" ").join("-").toLowerCase()}.${image}` )
     },
 })
 const upload = multer({storage : storage})
