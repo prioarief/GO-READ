@@ -14,11 +14,14 @@ module.exports = {
                 if(emailCheck.length == 0){
                     setData.password = hashSync(req.body.password, genSaltSync(1))
                     const result = await auth.register(setData)
+                    delete result.password
                     return helper.response(res, 'success' , result, 201)
                 }
                 return helper.response(res, 'failed' , 'Email has been registered', 300)
             }
-            return helper.response(res, 'failed' , validation.error.details[0].message, 500)
+            let errorMessage = validation.error.details[0].message
+            errorMessage = errorMessage.replace(/"/g, "")
+            return helper.response(res, 'failed' , errorMessage, 500)
         } catch (error) {
             console.log(error)
             return helper.response(res, 'failed', 'Internal Server Error', 500)
@@ -37,17 +40,20 @@ module.exports = {
                     const hash = result[0].password
                     const verify = compareSync(password, hash)
                     if(verify){
-                        const token = sign({ result: result }, "qwe1234", {
+                        const token = sign({ result: result }, process.env.JWT_KEY, {
                             expiresIn: "1h"
-                          });
-                          result[0].token = token
+                        });
+                        result[0].token = token
+                        delete result[0].password
                         return helper.response(res, 'success' , result, 201)
                     }
                     return helper.response(res, 'failed' , 'Password wrong!', 300)
                 }
                 return helper.response(res, 'failed' , 'Email is not registered', 404)
             }
-                return helper.response(res, 'failed' , validation.error.details[0].message, 500)
+                let errorMessage = validation.error.details[0].message
+                errorMessage = errorMessage.replace(/"/g, "")
+                return helper.response(res, 'failed' , errorMessage, 500)
         } catch (error) {
             console.log(error)
             return helper.response(res, 'failed', 'Internal Server Error', 500)

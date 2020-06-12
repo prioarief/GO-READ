@@ -1,13 +1,13 @@
 const connection = require("../config/database");
 module.exports = {
-    getAll : (show, page, sort, search) => {
+    getAll : (show, page, sorting, sort, search) => {
         return new Promise((resolve, reject) => {
             connection.query(`SELECT b.id, b.title, b.description, b.image, g.genre, a.author, b.status, b.created_at, b.updated_at FROM books b JOIN genres g ON g.id = b.genre_id JOIN authors a ON a.id = b.author_id 
             WHERE b.title LIKE '%${search}%' 
                 OR b.status LIKE '%${search}%' 
                 OR g.genre LIKE '%${search}%' 
                 OR a.author LIKE '%${search}%' 
-            ORDER BY b.created_at ${sort} LIMIT ${show} OFFSET ${page}`, (error, result) => {
+            ORDER BY ${sorting} ${sort} LIMIT ${show} OFFSET ${page}`, (error, result) => {
                 if(error){
                     reject(error)
                 }

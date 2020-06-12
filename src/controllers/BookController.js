@@ -6,14 +6,17 @@ const fs = require("fs")
 
 module.exports = {
 	getAllBook: async (req, res) => {
-        const show = req.query.show || 2
+        const show = req.query.show || 6
         const page = req.query.page || 1
-        const sorting = req.query.sort || ''
-        const sort = (sorting == 'latest') ? 'DESC' : ''
+        let sort = req.query.sort || 'title'
+        if(sort == 'latest'){
+            sort = 'created_at'
+        }
+        const sorting = (sort == 'created_at') ? 'DESC' : 'ASC'
         const search = req.query.search || ''
         let thisPage = (show * page) - show
 		try {
-            const result = await getAll(show, thisPage, sort, search)
+            const result = await getAll(show, thisPage, sort, sorting, search)
             if(result.length > 0){
                 return helper.response(res, 'success' , result, 200)
             }
@@ -50,7 +53,9 @@ module.exports = {
                 const data = await getDetail(result.id)
                 return helper.response(res, 'success' , data, 201)
             }
-            return helper.response(res, 'failed', validation.error.details[0].message, 500)
+            let errorMessage = validation.error.details[0].message
+            errorMessage = errorMessage.replace(/"/g, "")
+            return helper.response(res, 'failed' , errorMessage, 500)
         } catch (error) {
             console.log(error)
             return helper.response(res, 'failed', 'Internal Server Error', 500)

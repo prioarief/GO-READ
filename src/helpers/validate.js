@@ -1,8 +1,8 @@
 const joi = require("joi")
-const author = require("./validation/author")
-const genre = require("./validation/genre")
-const book = require("./validation/book")
-const auth = require("./validation/auth")
+const author = require("../middleware/author")
+const genre = require("../middleware/genre")
+const book = require("../middleware/book")
+const auth = require("../middleware/auth")
 
 module.exports = {
     authorValidation : (data) => {
