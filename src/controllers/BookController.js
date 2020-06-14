@@ -50,6 +50,7 @@ module.exports = {
             if(validation.error == null){
                 const result =  await insertBook(setData)
                 const data = await getDetail(result.id)
+                fs.unlinkSync(`public/images/${setData.image}`)
                 return helper.response(res, 'success' , data, 201)
             }
             fs.unlinkSync(`public/images/${setData.image}`)

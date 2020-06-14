@@ -1,8 +1,11 @@
 const helper = require("../helpers/message")
 const validate = require("../helpers/validate")
+const emailVerification = require("../helpers/email")
 const auth = require("../models/Auth")
 const { genSaltSync, compareSync, hashSync } = require("bcrypt")
-const { sign } = require("jsonwebtoken")
+const token = require("../middleware/createToken")
+const { USER_EMAIL, PASS_EMAIL } = process.env
+
 
 module.exports = {
     register : async (req, res) => {
@@ -15,6 +18,7 @@ module.exports = {
                     setData.password = hashSync(req.body.password, genSaltSync(1))
                     const result = await auth.register(setData)
                     delete result.password
+                    emailVerification.emailVerify(USER_EMAIL, PASS_EMAIL, setData.email)
                     return helper.response(res, 'success' , result, 201)
                 }
                 return helper.response(res, 'failed' , 'Email has been registered', 300)
@@ -40,11 +44,12 @@ module.exports = {
                     const hash = result[0].password
                     const verify = compareSync(password, hash)
                     if(verify){
-                        const token = sign({ result: result }, process.env.JWT_KEY, {
-                            expiresIn: "1h"
-                        });
-                        result[0].token = token
                         delete result[0].password
+                        let newToken = token.createToken(result, process.env.JWT_KEY, "1m")
+                        let refreshToken = token.createToken(result, process.env.JWT_KEY, "2m")
+
+                        result[0].token = newToken
+                        result[0].refreshToken = refreshToken
                         return helper.response(res, 'success' , result, 201)
                     }
                     return helper.response(res, 'failed' , 'Password wrong!', 300)
