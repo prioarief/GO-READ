@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Email Confirmation</title>
+    <style>
+        body{
+            background-color: #e96060;
+        }
+        #header {
+            color: black;
+            text-align: center;
+        }
+        a{
+            padding: 8px 8px;
+            text-align: center;
+            background-color: rgb(5, 109, 141);
+            color: white;
+            width: 1500px;
+            border-radius: 5px;
+            margin-left: 5px;
+        }
+        p{
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1 id="header">Welcome to Library APP</h1>
+    <p>Hi {{name}}. Thanks for join with us <br> Please click the button for activate your email</p>
+    <a href="{{url}}" target="_blank" rel="noopener noreferrer">Verify Your Email</a>
+</body>
+
+</html>

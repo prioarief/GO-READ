@@ -4,7 +4,6 @@ const emailVerification = require("../helpers/email")
 const auth = require("../models/Auth")
 const { genSaltSync, compareSync, hashSync } = require("bcrypt")
 const token = require("../middleware/createToken")
-const { USER_EMAIL, PASS_EMAIL } = process.env
 
 
 module.exports = {
@@ -14,11 +13,11 @@ module.exports = {
             const validation = validate.registerValidation(setData)
             if(validation.error == null){
                 const emailCheck = await auth.login(setData.email)
+                emailVerification.emailVerify(setData)
                 if(emailCheck.length == 0){
                     setData.password = hashSync(req.body.password, genSaltSync(1))
                     const result = await auth.register(setData)
                     delete result.password
-                    emailVerification.emailVerify(USER_EMAIL, PASS_EMAIL, setData.email)
                     return helper.response(res, 'success' , result, 201)
                 }
                 return helper.response(res, 'failed' , 'Email has been registered', 300)
@@ -46,10 +45,10 @@ module.exports = {
                     if(verify){
                         delete result[0].password
                         let newToken = token.createToken(result, process.env.JWT_KEY, "1m")
-                        let refreshToken = token.createToken(result, process.env.JWT_KEY, "2m")
+                        // let refreshToken = token.createToken(result, process.env.JWT_KEY, "2m")
 
                         result[0].token = newToken
-                        result[0].refreshToken = refreshToken
+                        // result[0].refreshToken = refreshToken
                         return helper.response(res, 'success' , result, 201)
                     }
                     return helper.response(res, 'failed' , 'Password wrong!', 300)

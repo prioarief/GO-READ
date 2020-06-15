@@ -1,23 +1,26 @@
 require("dotenv").config()
 const nodemailer = require("nodemailer")
+const { USER_EMAIL, PASS_EMAIL, APP_URL } = process.env
+const mustache = require("mustache")
+const fs = require("fs")
 
 module.exports = {
-    emailVerify : (user_email, pass_email, email) => {
+    emailVerify : (data) => {
+        // data.url = APP_URL
+        const templateEmail = fs.readFileSync('./src/helpers/template.html',{ encoding: 'utf-8' })
         const transporter = nodemailer.createTransport({
             service : 'gmail',
             auth : {
-                user: user_email,
-                pass: pass_email
+                user: USER_EMAIL,
+                pass: PASS_EMAIL
             }
         })
         
         const mailOptions = {
             from: 'prioariefgunawangunawan@gmail.com',
-            to : email,
+            to : data.email,
             subject: 'Email Confirmation',
-            text: `tes confirmation
-                    <a href="${email}">Click</a>
-                    `
+            html: mustache.render(templateEmail, data)
         }
         
         transporter.sendMail(mailOptions, (error, info) => {
