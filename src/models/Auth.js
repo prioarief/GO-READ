@@ -13,7 +13,7 @@ module.exports = {
 
     login :  (email) => {
             return new Promise((resolve, reject) => {
-                connection.query('SELECT u.id, u.email, u.password, u.name, r.role FROM users u JOIN roles r ON r.id = u.role WHERE u.email = ? ', email, (error, result) => {
+                connection.query('SELECT u.id, u.email, u.password, u.name, u.is_active, r.role FROM users u JOIN roles r ON r.id = u.role WHERE u.email = ? ', email, (error, result) => {
                     if(error){
                         reject(error)
                     }
@@ -62,7 +62,40 @@ module.exports = {
     
     detailUser : (id) => {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT u.email, u.password, u.name, r.role FROM users u JOIN roles r ON r.id = u.role WHERE u.id = ? ', id, (error, result) => {
+            connection.query('SELECT u.*, r.role FROM users u JOIN roles r ON r.id = u.role WHERE u.id = ? ', id, (error, result) => {
+                if(error){
+                    reject(error)
+                }
+                resolve(result)
+            })
+        })
+    },
+    
+    insertCode : (data) => {
+        return new Promise((resolve, reject) => {
+            connection.query('INSERT INTO verification SET ? ', data, (error, result) => {
+                if(error){
+                    reject(error)
+                }
+                resolve(result)
+            })
+        })
+    },
+    
+    getCode : (email) => {
+        return new Promise((resolve, reject) => {
+            connection.query('SELECT * FROM verification WHERE email = ? ', email, (error, result) => {
+                if(error){
+                    reject(error)
+                }
+                resolve(result)
+            })
+        })
+    },
+    
+    deleteCode : (email) => {
+        return new Promise((resolve, reject) => {
+            connection.query('DELETE FROM verification WHERE email = ? ', email, (error, result) => {
                 if(error){
                     reject(error)
                 }

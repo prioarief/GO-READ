@@ -13,6 +13,11 @@ const schema = {
 		password: joi.string().required(),
 	}),
 	
+	verification: joi.object().keys({
+		email: joi.string().email({ minDomainAtoms: 2 }).required(),
+		code: joi.string().min(6).max(6).required(),
+	}),
+	
 	edit: joi.object().keys({
 		email: joi.string().email({ minDomainAtoms: 2 }),
 		name: joi.string(),

@@ -6,33 +6,44 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Email Confirmation</title>
     <style>
-        body{
-            background-color: #e96060;
+        .bg {
+            background-color: #eaeaea;
+            padding: 10px 10px;
         }
+
         #header {
             color: black;
             text-align: center;
         }
-        a{
-            padding: 8px 8px;
+
+        p {
             text-align: center;
-            background-color: rgb(5, 109, 141);
-            color: white;
-            width: 1500px;
-            border-radius: 5px;
-            margin-left: 5px;
+            font-size: 15px;
         }
-        p{
-            margin-left: 10px;
+
+        h2#code {
+            text-align: center;
+            color: black;
+            font-weight: bold;
+        }
+
+        .hr {
+            width: 90px;
+            text-align: center;
+            border: 2px solid black;
         }
     </style>
 </head>
 
 <body>
 
-    <h1 id="header">Welcome to Library APP</h1>
-    <p>Hi {{name}}. Thanks for join with us <br> Please click the button for activate your email</p>
-    <a href="{{url}}" target="_blank" rel="noopener noreferrer">Verify Your Email</a>
+    <div class="bg">
+        <h1 id="header">Welcome to GO READ</h1>
+        <p>Hi {{name}}. Thanks for join with us <br> Please insert this code for activate your email</p>
+        <hr class="hr">
+        <h2 id="code">{{code}}</h2>
+        <hr class="hr">
 </body>
+</div>
 
 </html>

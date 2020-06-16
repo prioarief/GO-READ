@@ -23,6 +23,7 @@
     "mustache": "^4.0.1",
     "mysql": "^2.18.1",
     "nodemailer": "^6.4.8",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "randomatic": "^3.1.1"
   }
 }

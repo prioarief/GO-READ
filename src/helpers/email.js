@@ -6,7 +6,6 @@ const fs = require("fs")
 
 module.exports = {
     emailVerify : (data) => {
-        // data.url = APP_URL
         const templateEmail = fs.readFileSync('./src/helpers/template.html',{ encoding: 'utf-8' })
         const transporter = nodemailer.createTransport({
             service : 'gmail',
