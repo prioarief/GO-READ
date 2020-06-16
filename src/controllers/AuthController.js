@@ -44,8 +44,8 @@ module.exports = {
 					const verify = compareSync(password, hash);
 					if (verify) {
 						delete result[0].password;
-						let newToken = token.createToken(result, process.env.JWT_KEY, "1m");
-						let refreshToken = token.createToken(result, process.env.JWT_KEY, "2m")
+						let newToken = token.createToken(result, process.env.JWT_KEY, "10m");
+						let refreshToken = token.createToken(result, process.env.JWT_KEY, "20m")
 
 						result[0].token = newToken;
 						result[0].refreshToken = refreshToken
@@ -87,9 +87,9 @@ module.exports = {
 			const result = await auth.login(email)
 			if(result.length == 1){
 				delete result[0].password 
-				return helper.response(res, "success", `Email ${email} not found`, 404);
+				return helper.response(res, "success", result, 200);
 			}
-			return helper.response(res, "success", result, 200);
+			return helper.response(res, "success", `Email ${email} not found`, 404);
 		} catch (error) {
 			console.log(error);
 			return helper.response(res, "failed", "Internal Server Error", 500);
