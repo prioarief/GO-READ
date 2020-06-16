@@ -16,8 +16,9 @@ module.exports = {
 				if (emailCheck.length == 0) {
 					setData.password = hashSync(req.body.password, genSaltSync(1));
 					const result = await auth.register(setData);
-					delete result.password;
-					return helper.response(res, "success", result, 201);
+					const data = await auth.detailUser(result.id)
+					delete data[0].password;
+					return helper.response(res, "success", data, 201);
 				}
 				return helper.response(res, "failed", "Email has been registered", 300);
 			}

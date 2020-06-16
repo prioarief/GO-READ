@@ -2,7 +2,7 @@ const connection = require("../config/database");
 module.exports = {
     getAll : (show, page) => {
         return new Promise((resolve, reject) => {
-            connection.query(`SELECT * FROM authors`, (error, result) => {
+            connection.query(`SELECT * FROM roles`, (error, result) => {
                 if(error){
                     reject(error)
                 }
@@ -11,20 +11,21 @@ module.exports = {
         })
     },
 
-    login :  (email) => {
+    getDetail :  (id) => {
             return new Promise((resolve, reject) => {
-                connection.query('SELECT u.email, u.password, u.name, r.role FROM users u JOIN roles r ON r.id = u.role WHERE u.email = ? ', email, (error, result) => {
+                connection.query('SELECT * FROM roles WHERE id = ?', id, (error, result) => {
                     if(error){
                         reject(error)
                     }
+
                     resolve(result)
                 })
             }) 
     },
 
-    register : (setData) => {
+    insertRole : (setData) => {
         return new Promise((resolve, reject) => {
-            connection.query('INSERT INTO users SET ?', setData, (error, result) => {
+            connection.query('INSERT INTO roles SET ?', setData, (error, result) => {
                 if(error){
                     reject(error)
                 }
@@ -38,9 +39,9 @@ module.exports = {
         })
     },
 
-    editAuthor: (setData, id) => {
+    editRole: (setData, id) => {
         return new Promise((resolve, reject) => {
-            connection.query('UPDATE authors SET ? WHERE id=?', [setData, id], (error, result) => {
+            connection.query('UPDATE roles SET ? WHERE id=?', [setData, id], (error, result) => {
                 if(error){
                     reject(error)
                 }
@@ -49,9 +50,9 @@ module.exports = {
         })
     },
 
-    deleteAuthor : (id) => {
+    deleteRole : (id) => {
         return new Promise((resolve, reject) => {
-            connection.query('DELETE FROM authors WHERE id=?', id, (error, result) => {
+            connection.query('DELETE FROM roles WHERE id=?', id, (error, result) => {
                 if(error){
                     reject(error)
                 }
@@ -60,25 +61,14 @@ module.exports = {
         })
     },
 
-    searchAuthor : (keyword) => {
+    searchRole : (keyword) => {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT * FROM authors WHERE author like ?', `%${keyword}%`, (error, result) => {
+            connection.query('SELECT * FROM roles WHERE role like ?', `%${keyword}%`, (error, result) => {
                 if(error){
                     reject(error)
                 }
                 resolve(result)
             })
         })
-    },
-    
-    detailUser : (id) => {
-        return new Promise((resolve, reject) => {
-            connection.query('SELECT u.email, u.password, u.name, r.role FROM users u JOIN roles r ON r.id = u.role WHERE u.id = ? ', id, (error, result) => {
-                if(error){
-                    reject(error)
-                }
-                resolve(result)
-            })
-        })
-    },
+    }
 }

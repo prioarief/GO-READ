@@ -3,6 +3,7 @@ const author = require("../middleware/author")
 const genre = require("../middleware/genre")
 const book = require("../middleware/book")
 const auth = require("../middleware/auth")
+const role = require("../middleware/role")
 
 module.exports = {
     authorValidation : (data) => {
@@ -23,5 +24,9 @@ module.exports = {
     
     authValidation : (data) => {
         return joi.validate(data, auth.login)
+    },
+
+    roleValidation : (data) => {
+        return joi.validate(data, role)
     }
 }
