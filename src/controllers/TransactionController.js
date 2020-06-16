@@ -16,13 +16,13 @@ module.exports = {
                     user_id : user_id,
                 }
                 const borrowed = await Transaction.insertTransaction(setData)
-
                 if(borrowed){
+                    const result = await Transaction.getDetailTransaction(borrowed.id)
                     const data = {
                         status : 'Borrowed'
                     }
                     await Book.editBook(data, book_id)
-                    return helper.response(res, 'success' , 'The Book has been borrowed', 200)
+                    return helper.response(res, 'success' , result, 200)
                 }
             }else{
                 return helper.response(res, 'failed' , 'The book is not available', 401)
@@ -50,7 +50,8 @@ module.exports = {
                         status : 'Available'
                     }
                     await Book.editBook(data, book_id)
-                    return helper.response(res, 'success' , 'The Book has been returned', 200)
+                    setData.message = 'The book has been returned'
+                    return helper.response(res, 'success' , setData, 200)
                 }
             }else{
                 return helper.response(res, 'failed' , 'The book is not borrowed', 401)

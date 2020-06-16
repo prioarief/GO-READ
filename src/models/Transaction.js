@@ -18,7 +18,8 @@ module.exports = {
 
     getDetailTransaction :  (id) => {
             return new Promise((resolve, reject) => {
-                connection.query('SELECT b.id, b.title, b.description, b.image, g.genre, a.author, b.status, b.created_at, b.updated_at FROM books b JOIN genres g ON g.id = b.genre_id JOIN authors a ON a.id = b.author_id WHERE b.id = ?', id, (error, result) => {
+                connection.query('SELECT b.title, b.description, g.genre, a.author, tr.borrowed_at FROM transaction tr JOIN books b ON b.id = tr.book_id JOIN genres g ON g.id = b.genre_id JOIN authors a ON a.id = b.author_id WHERE tr.id = ?', id,
+                (error, result) => {
                     if(error){
                         reject(error)
                     }
