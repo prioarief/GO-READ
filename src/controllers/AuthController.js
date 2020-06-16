@@ -80,4 +80,81 @@ module.exports = {
 			return helper.response(res, "failed", "Internal Server Error", 500);
 		}
 	},
+
+	detailUser : async (req, res) => {
+		const email = req.params.email
+		try {
+			const result = await auth.login(email)
+			if(result.length == 1){
+				delete result[0].password 
+				return helper.response(res, "success", `Email ${email} not found`, 404);
+			}
+			return helper.response(res, "success", result, 200);
+		} catch (error) {
+			console.log(error);
+			return helper.response(res, "failed", "Internal Server Error", 500);
+		}
+	},
+	
+	editUser : async (req, res) => {
+		const email = req.params.email || null
+		const setData = req.body
+		try {
+			let dataLength = 0
+			for(const key in setData){
+				dataLength++
+			}
+			
+			const validation = validate.editUserValidation(setData)
+			if(validation.error == null){
+				if(dataLength > 0){
+					const result = await auth.login(email) 
+					if(result.length == 1){
+						const id = result[0].id
+						if(req.body.password){
+							setData.password = hashSync(req.body.password, genSaltSync(1));
+						}
+						const data = await auth.editUsers(setData, id)
+		
+						if(data.affectedRows == 1){
+							delete setData.password
+							const response = {
+								id : id,
+								...setData
+							}
+							return helper.response(res, "success", response, 200);
+						}
+					}
+					return helper.response(res, "success", `Email ${email} not found`, 404);
+				}
+				return helper.response(res, "failed", 'Nothing changed', 401);
+			}
+			let errorMessage = validation.error.details[0].message;
+			errorMessage = errorMessage.replace(/"/g, "");
+			return helper.response(res, "failed", errorMessage, 401);
+		} catch (error) {
+			console.log(error);
+			return helper.response(res, "failed", "Internal Server Error", 500);
+		}
+	},
+	
+	deleteUser : async (req, res) => {
+		const email = req.params.email
+		try {
+			const result = await auth.login(email) 
+			if(result.length == 1 ){
+				const id = result[0].id
+				const data = await auth.deleteUser(id)
+
+				if(data.affectedRows == 1){
+					return helper.response(res, "success", `Email ${email} succesfull deleted`, 200);
+				}
+			}
+			return helper.response(res, "success", `Email ${email} not found`, 404);
+
+		} catch (error) {
+			console.log(error);
+			return helper.response(res, "failed", "Internal Server Error", 500);
+		}
+	},
 };

@@ -25,6 +25,10 @@ module.exports = {
     authValidation : (data) => {
         return joi.validate(data, auth.login)
     },
+    
+    editUserValidation : (data) => {
+        return joi.validate(data, auth.edit)
+    },
 
     roleValidation : (data) => {
         return joi.validate(data, role)

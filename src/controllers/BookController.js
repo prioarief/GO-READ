@@ -50,10 +50,10 @@ module.exports = {
             if(validation.error == null){
                 const result =  await insertBook(setData)
                 const data = await getDetail(result.id)
-                fs.unlinkSync(`public/images/${setData.image}`)
+                fs.unlinkSync(`src/images/${setData.image}`)
                 return helper.response(res, 'success' , data, 201)
             }
-            fs.unlinkSync(`public/images/${setData.image}`)
+            fs.unlinkSync(`src/images/${setData.image}`)
             let errorMessage = validation.error.details[0].message
             errorMessage = errorMessage.replace(/"/g, "")
             return helper.response(res, 'failed' , errorMessage, 400)
@@ -76,7 +76,7 @@ module.exports = {
         try {
             const result = await editBook(setData, id)
             if(result.affectedRows == 1){
-                if(oldImage != null) fs.unlinkSync(`public/images/${oldImage}`)
+                if(oldImage != null) fs.unlinkSync(`src/images/${oldImage}`)
                 const data = await getDetail(id)
                 return helper.response(res, 'success' , data, 200)
             }
@@ -94,7 +94,7 @@ module.exports = {
             const image = data[0].image
             const result = await deleteBook(id)
             if(result.affectedRows == 1){
-                fs.unlinkSync(`public/images/${image}`)
+                fs.unlinkSync(`src/images/${image}`)
                 return helper.response(res, 'success' , `Data id ${id} berhasil di hapus`, 200)
             }
             return helper.response(res, 'failed' , `Data id ${id} not found`, 404)
