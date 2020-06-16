@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const createToken = require("../middleware/createToken");
+// const createToken = require("../middleware/createToken");
 module.exports = (req, res, next) => {
 	let token = null;
 	try {
@@ -9,14 +9,13 @@ module.exports = (req, res, next) => {
 		next();
 	} catch (error) {
 		if (error.name == "TokenExpiredError") {
-			const payload = jwt.verify(token, process.env.JWT_KEY, {
-				ignoreExpiration: true,
-			});
-			console.log(payload);
-            const refreshToken = createToken.createToken(payload.result[0], process.env.JWT_KEY, "1m" )
+			// const payload = jwt.verify(token, process.env.JWT_KEY, {
+			// 	ignoreExpiration: true,
+			// });
+			// console.log(payload);
+            // const refreshToken = createToken.createToken(payload.result[0], process.env.JWT_KEY, "1m" )
 			return res.status(200).json({
                 message: "Invalid Token",
-				refreshToken: refreshToken,
 			});
 		}
 		return res.status(401).json({
