@@ -10,11 +10,11 @@ const roleRoute = require("./role")
 const profileRoute = require("./profile")
 
 
-router.use('/api/authors', tokenvalidation, checkRole.checkRole,  authorRoute)
-router.use('/api/genres', tokenvalidation, checkRole.checkRole,  genreRoute)
-router.use('/api/books', tokenvalidation, checkRole.checkRole,  bookRoute)
-router.use('/api/roles', tokenvalidation, checkRole.checkRole,  roleRoute)
+router.use('/api/authors', tokenvalidation, authorRoute)
+router.use('/api/genres', tokenvalidation, genreRoute)
+router.use('/api/books', tokenvalidation, bookRoute)
+router.use('/api/roles', tokenvalidation, checkRole.checkRole, roleRoute)
 router.use('/api/auth', authRoute)
-router.use('/api/profile', tokenvalidation, checkRole.checkRole, profileRoute)
+router.use('/api/profile', tokenvalidation, profileRoute)
 
 module.exports = router

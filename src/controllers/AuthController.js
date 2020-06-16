@@ -44,8 +44,8 @@ module.exports = {
 					const verify = compareSync(password, hash);
 					if (verify) {
 						delete result[0].password;
-						let newToken = token.createToken(result, process.env.JWT_KEY, "10m");
-						let refreshToken = token.createToken(result, process.env.JWT_KEY, "20m")
+						let newToken = token.createToken(result, process.env.JWT_KEY, "1h");
+						let refreshToken = token.createToken(result, process.env.JWT_KEY, "24h")
 
 						result[0].token = newToken;
 						result[0].refreshToken = refreshToken

@@ -2,9 +2,10 @@ const { getAll, getDetail, insertBook, editBook, deleteBook, searchBook } = requ
 const helper = require("../helpers/message")
 const validate = require("../helpers/validate")
 const fs = require("fs")
-
+const checkRole = require("../middleware/middlewareRole")
 
 module.exports = {
+
 	getAllBook: async (req, res) => {
         const show = req.query.show || 6
         const page = req.query.page || 1
@@ -43,6 +44,7 @@ module.exports = {
 
 
 	createBook: async (req, res) => {
+        
         const setData = req.body
         setData.image = req.file ? req.file.filename : ''
         try {
@@ -117,5 +119,10 @@ module.exports = {
             console.log(error)
             return helper.response(res, 'failed', 'Internal Server Error', 500)
         }
-	}
+    },
+    
+    transaction : async (req, res) => {
+        const data = Date.now()
+        console.log(data)
+    }
 };
