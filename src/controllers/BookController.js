@@ -2,7 +2,6 @@ const { getAll, getDetail, insertBook, editBook, deleteBook, searchBook } = requ
 const helper = require("../helpers/message")
 const validate = require("../helpers/validate")
 const fs = require("fs")
-const checkRole = require("../middleware/middlewareRole")
 
 module.exports = {
 
@@ -120,9 +119,4 @@ module.exports = {
             return helper.response(res, 'failed', 'Internal Server Error', 500)
         }
     },
-    
-    transaction : async (req, res) => {
-        const data = Date.now()
-        console.log(data)
-    }
 };
