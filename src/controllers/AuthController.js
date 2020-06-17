@@ -28,8 +28,14 @@ module.exports = {
 					await auth.insertCode(code)
 					const data = await auth.detailUser(result.id)
 					delete data[0].role;
+					delete data[0].is_active;
 					delete data[0].password;
-					return helper.response(res, "success", data, 201);
+
+					const message = {
+						message : "Registration successful, check your email to verify email",
+						data : data
+					}
+					return helper.response(res, "success", message, 201);
 				}
 				return helper.response(res, "failed", "Email has been registered", 300);
 			}
@@ -52,24 +58,30 @@ module.exports = {
 			if(validation.error == null){
 				const check = await auth.getCode(setData.email)
 				const checkEmail = await auth.login(setData.email)
-				if(check.length == 0 && checkEmail.length == 0){
-					return helper.response(res, "failed", "Email is not registered!", 401);
-				}
-				if(setData.code === check[0].code){
-					const data = {
-						is_active : 1
+				if(checkEmail.length != 0){
+					if(check.length != 0){
+						if(setData.code === check[0].code && setData.email === check[0].email){
+							const data = {
+								is_active : 1
+							}
+							await auth.editUsers(data, checkEmail[0].id )
+							await auth.deleteCode(setData.email)
+							return helper.response(res, "success", 'Activation Success', 200);
+						}
+	
+						return helper.response(res, "failed", "Activation failed, The code is wrong!", 401);
 					}
-					await auth.editUsers(data, checkEmail[0].id )
-					await auth.deleteCode(setData.email)
-					return helper.response(res, "success", 'Activation Success', 200);
+					return helper.response(res, "failed", "Email is wrong!", 401);
 				}
-				return helper.response(res, "failed", "Activation failed, The code is wrong!", 401);
+
+				return helper.response(res, "failed", "Email is not registered!", 401);
+				
 			}
 			let errorMessage = validation.error.details[0].message;
 			errorMessage = errorMessage.replace(/"/g, "");
 			return helper.response(res, "failed", errorMessage, 401);
 		} catch (error) {
-			
+			console.log(error)
 		}
 	},
 

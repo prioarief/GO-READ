@@ -68,7 +68,11 @@ module.exports = {
 
     searchBook : (keyword) => {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT * FROM books WHERE title like ?', `%${keyword}%`, (error, result) => {
+            connection.query(`SELECT b.id, b.title, b.description, b.image, g.genre, a.author, b.status, b.created_at, b.updated_at FROM books b JOIN genres g ON g.id = b.genre_id JOIN authors a ON a.id = b.author_id 
+            WHERE b.title LIKE '%${keyword}%' 
+                OR b.status LIKE '%${keyword}%' 
+                OR g.genre LIKE '%${keyword}%' 
+                OR a.author LIKE '%${keyword}%'`, (error, result) => {
                 if(error){
                     reject(error)
                 }
