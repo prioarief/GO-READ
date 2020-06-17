@@ -1,9 +1,6 @@
 # Go Read
 
 Go read is a library application for viewing and borrowing books.
-![downloads](https://img.shields.io/github/downloads/atom/atom/total.svg)
-![build](https://img.shields.io/appveyor/ci/:user/:repo.svg)
-![chat](https://img.shields.io/discord/:serverId.svg)
 
 ## Stack
  - Node js (Express)
@@ -63,7 +60,7 @@ npm / yarn start
     - Get All Book (get) : /api/genres/
 
 ## Author
-- [Prio Arief Gunawan](https://choosealicense.com/licenses/mit/)
+- [Prio Arief Gunawan](https://www.linkedin.com/in/priooarief/)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
