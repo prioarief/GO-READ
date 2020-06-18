@@ -1,13 +1,8 @@
 const connection = require("../config/database");
 module.exports = {
-    getAll : (show, page, sorting, sort, search) => {
+    getAll : () => {
         return new Promise((resolve, reject) => {
-            connection.query(`SELECT b.id, b.title, b.description, b.image, g.genre, a.author, b.status, b.created_at, b.updated_at FROM books b JOIN genres g ON g.id = b.genre_id JOIN authors a ON a.id = b.author_id 
-            WHERE b.title LIKE '%${search}%' 
-                OR b.status LIKE '%${search}%' 
-                OR g.genre LIKE '%${search}%' 
-                OR a.author LIKE '%${search}%' 
-            ORDER BY ${sorting} ${sort} LIMIT ${show} OFFSET ${page}`, (error, result) => {
+            connection.query(`SELECT tr.id, us.name as borrower, b.title, b.description, g.genre, a.author, tr.borrowed_at FROM transaction tr JOIN books b ON b.id = tr.book_id JOIN genres g ON g.id = b.genre_id JOIN authors a ON a.id = b.author_id JOIN users us ON us.id = tr.user_id`, (error, result) => {
                 if(error){
                     reject(error)
                 }
@@ -18,7 +13,7 @@ module.exports = {
 
     getDetailTransaction :  (id) => {
             return new Promise((resolve, reject) => {
-                connection.query('SELECT b.title, b.description, g.genre, a.author, tr.borrowed_at FROM transaction tr JOIN books b ON b.id = tr.book_id JOIN genres g ON g.id = b.genre_id JOIN authors a ON a.id = b.author_id WHERE tr.id = ?', id,
+                connection.query('SELECT tr.id, us.name as borrower, b.id as book_id, b.title, b.description, g.genre, a.author, tr.borrowed_at, tr.returned_at FROM transaction tr JOIN books b ON b.id = tr.book_id JOIN genres g ON g.id = b.genre_id JOIN authors a ON a.id = b.author_id JOIN users us ON us.id = tr.user_id WHERE tr.id = ?', id,
                 (error, result) => {
                     if(error){
                         reject(error)
