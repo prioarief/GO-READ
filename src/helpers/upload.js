@@ -8,6 +8,16 @@ const storage = multer.diskStorage({
         cb(null, `${Date.now()}-${req.body.title.split(" ").join("-").toLowerCase()}.${image}` )
     },
 })
-const upload = multer({storage : storage})
+const filter = function (req, file, cb) {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+};
+const upload = multer({
+    storage : storage,
+    fileFilter: filter
+})
 
 module.exports = upload
