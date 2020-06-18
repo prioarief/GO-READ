@@ -12,19 +12,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan("dev"));
 
-var whitelist = ['http://localhost:3000/', 'http://example2.com/']
-var corsOptionsDelegate = function (req, callback) {
-  let corsOptions;
-  if (whitelist.indexOf(req.header('Origin')) !== -1) {
-    corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
-  } else {
-    corsOptions = { origin: false } // disable CORS for this request
-  }
-  callback(null, corsOptions) // callback expects two parameters: error and options
-}
+// var whitelist = ['http://localhost:3000/', 'http://example2.com/']
+// var corsOptionsDelegate = function (req, callback) {
+//   let corsOptions;
+//   if (whitelist.indexOf(req.header('Origin')) !== -1) {
+//     corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+//   } else {
+//     corsOptions = { origin: false } // disable CORS for this request
+//   }
+//   callback(null, corsOptions) // callback expects two parameters: error and options
+// }
 
-app.use(cors(corsOptionsDelegate))
-app.use(routes, cors(corsOptionsDelegate))
-
+app.use(cors())
+app.use(routes)
+app.get('*', (req, res) => {
+  res.status(404).send('Not found')
+})
 
 app.listen(process.env.APP_PORT, () => console.log(`Server running at port ${process.env.APP_PORT}`))

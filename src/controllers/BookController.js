@@ -6,7 +6,7 @@ const fs = require("fs")
 module.exports = {
 
 	getAllBook: async (req, res) => {
-        const show = req.query.show || 6
+        const show = req.query.show || 3
         const page = req.query.page || 1
         let sort = req.query.sort || 'title'
         if(sort == 'latest'){
@@ -91,9 +91,9 @@ module.exports = {
         const id = req.params.id
         try {
             const data = await getDetail(id)
-            const image = data[0].image
             const result = await deleteBook(id)
             if(result.affectedRows == 1){
+                const image = data[0].image
                 fs.unlinkSync(`./src/images/${image}`)
                 return helper.response(res, 'success' , `Data id ${id} berhasil di hapus`, 200)
             }

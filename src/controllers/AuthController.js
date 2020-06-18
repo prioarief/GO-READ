@@ -106,9 +106,9 @@ module.exports = {
 							result[0].refreshToken = refreshToken
 							return helper.response(res, "success", result, 201);
 						}
-						return helper.response(res, "failed", "Your account is not active!", 300);
+						return helper.response(res, "failed", "Password wrong!", 300);
 					}
-					return helper.response(res, "failed", "Password wrong!", 300);
+					return helper.response(res, "failed", "Your account is not active!", 300);
 				}
 				return helper.response(res, "failed", "Email is not registered", 404);
 			}
