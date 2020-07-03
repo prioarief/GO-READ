@@ -20,8 +20,23 @@ module.exports = {
         try {
             const data = await Transaction.getDetailTransaction(id)
             if(data.length != 0){
-                delete data[0].returned_at
+                // delete data[0].returned_at
                 delete data[0].book_id
+                return helper.response(res, 'success' , data, 200)
+            }
+            return helper.response(res, 'success' , 'Not found', 404)
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    
+    history : async (req, res) => {
+        const id = req.decoded.result[0].id
+        try {
+            const data = await Transaction.getHistoryTransaction(id)
+            if(data.length != 0){
+                // delete data[0].returned_at
+                // delete data[0].book_id
                 return helper.response(res, 'success' , data, 200)
             }
             return helper.response(res, 'success' , 'Not found', 404)

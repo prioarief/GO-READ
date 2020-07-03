@@ -15,7 +15,7 @@ router.use('/api/authors', tokenvalidation, authorRoute)
 router.use('/api/genres', tokenvalidation, genreRoute)
 router.use('/api/books', tokenvalidation, bookRoute)
 router.use('/api/roles', tokenvalidation, checkRole.checkRole, roleRoute)
-router.use('/api/transaction', tokenvalidation, checkRole.checkRole, transactionRoute)
+router.use('/api/transaction', tokenvalidation, transactionRoute)
 router.use('/api/auth', authRoute)
 router.use('/api/profile', tokenvalidation, profileRoute)
 

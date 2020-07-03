@@ -24,6 +24,7 @@ app.use(morgan("dev"));
 // }
 
 app.use(cors())
+app.use('/images', express.static('src/images'))
 app.use(routes)
 app.get('*', (req, res) => {
   res.status(404).send('Not found')

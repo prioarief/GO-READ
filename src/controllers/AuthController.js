@@ -99,12 +99,12 @@ module.exports = {
 						const verify = compareSync(password, hash);
 						if (verify) {
 							delete result[0].password;
-							let newToken = token.createToken(result, process.env.JWT_KEY, "1h");
+							let newToken = token.createToken(result, process.env.JWT_KEY, "24h");
 							let refreshToken = token.createToken(result, process.env.JWT_KEY, "24h")
 
 							result[0].token = newToken;
 							result[0].refreshToken = refreshToken
-							return helper.response(res, "success", result, 201);
+							return helper.response(res, "success", result, 200);
 						}
 						return helper.response(res, "failed", "Password wrong!", 300);
 					}
