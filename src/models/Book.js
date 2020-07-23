@@ -2,7 +2,7 @@ const connection = require("../config/database");
 module.exports = {
     getImage : () => {
         return new Promise((resolve, reject) => {
-            connection.query(`SELECT image from books`, (error, result) => {
+            connection.query(`SELECT * from books`, (error, result) => {
                 if(error){
                     reject(error)
                 }
@@ -12,7 +12,7 @@ module.exports = {
     },
     getAll : (show, page, sorting, sort, search) => {
         return new Promise((resolve, reject) => {
-            connection.query(`SELECT b.id, b.title, b.description, b.image, g.genre, a.author, b.status, b.created_at, b.updated_at FROM books b JOIN genres g ON g.id = b.genre_id JOIN authors a ON a.id = b.author_id 
+            connection.query(`SELECT b.id, b.title, b.description, b.image, g.genre, b.genre_id, a.author, b.author_id, b.status, b.created_at, b.updated_at FROM books b JOIN genres g ON g.id = b.genre_id JOIN authors a ON a.id = b.author_id 
             WHERE b.title LIKE '%${search}%' 
                 OR b.status LIKE '%${search}%' 
                 OR g.genre LIKE '%${search}%' 
@@ -45,6 +45,7 @@ module.exports = {
                     reject(error)
                 }
                 
+                console.log(setData)
                 const newData ={
                     id : result.insertId,
                     ...setData

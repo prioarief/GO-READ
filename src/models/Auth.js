@@ -13,7 +13,7 @@ module.exports = {
 
     login :  (email) => {
             return new Promise((resolve, reject) => {
-                connection.query('SELECT u.id, u.email, u.password, u.name, u.is_active, r.role FROM users u JOIN roles r ON r.id = u.role WHERE u.email = ? ', email, (error, result) => {
+                connection.query('SELECT u.id, u.email, u.password, u.name, u.is_active, u.created_at, r.role FROM users u JOIN roles r ON r.id = u.role WHERE u.email = ? ', email, (error, result) => {
                     if(error){
                         reject(error)
                     }

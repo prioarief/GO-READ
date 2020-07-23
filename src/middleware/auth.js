@@ -5,7 +5,7 @@ const schema = {
 		email: joi.string().email({ minDomainAtoms: 2 }).required(),
 		password: joi.string().min(6).required(),
 		name: joi.string().required(),
-		role: joi.string().required(),
+		role: joi.number().required(),
 	}),
 
 	login: joi.object().keys({
