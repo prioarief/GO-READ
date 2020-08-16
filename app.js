@@ -8,6 +8,7 @@ const cors = require("cors")
 const allowedCors = require("./src/helpers/cors")
 
 
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan("dev"));
@@ -23,7 +24,6 @@ app.use(morgan("dev"));
 //   callback(null, corsOptions) // callback expects two parameters: error and options
 // }
 
-app.use(cors())
 app.use('/images', express.static('src/images'))
 app.use(routes)
 app.get('*', (req, res) => {
