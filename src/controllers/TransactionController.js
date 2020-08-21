@@ -83,9 +83,8 @@ module.exports = {
             const status = (data[0].returned_at == null) ? true : false
             if(status){
                 const setData = {
-                    returned_at : date.format(),
+                    returned_at : date.format("YYYY-MM-DD HH:mm:ss"),
                 }
-                console.log(setData)
                 const returned = await Transaction.returnBook(setData, data[0].book_id, user_id)
                 if(returned){
                     const bookdata = {
